@@ -15,7 +15,7 @@ let handleWeather = async (req, res) => {
   let lat = Number(req.query.lat);
   let lon = Number(req.query.lon);
   let city_name = req.query.city_name;
-  let URL = `https://api.weatherbit.io/v2.0/forecast/daily?city=${city_name}&key=${process.env.WEATHERBIT_API_KEY}`;
+  let URL = `https://api.weatherbit.io/v2.0/forecast/daily?city=${city_name}&key=${process.env.WEATHERBIT_API_KEY}&lon=${lon}&lat=${lat}`;
   let axiosResponse = await axios.get(URL);
   let weatherData = axiosResponse.data;
   let cleanedData = weatherData.data.map((item) => {
