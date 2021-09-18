@@ -36,3 +36,46 @@ class ForeCast {
     this.description = description;
   }
 }
+
+let handleMovieData = async (req, res) => {
+  let searchQuery = req.query.searchQuery;
+  let url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${searchQuery}`;
+  let response = await axios.get(url);
+  let movieData = response.data;
+
+  let filterdData = movieData.results.map((value) => {
+    return new ForecastMovie(
+      value.title,
+      value.overview,
+      value.vote_average,
+      value.vote_count,
+      value.poster_path,
+      value.popularity,
+      value.release_date
+    );
+  });
+  res.status(200).send(filterdData);
+};
+
+class ForecastMovie {
+  constructor(
+    title,
+    overview,
+    vote_average,
+    vote_count,
+    poster_path,
+    popularity,
+    release_date
+  ) {
+    this.title = title;
+    this.overview = overview;
+    this.vote_average = vote_average;
+    this.vote_count = vote_count;
+    this.poster_path = `https://image.tmdb.org/t/p/w500/${poster_path}`;
+    this.popularity = popularity;
+    this.release_date = release_date;
+  }
+}
+console.log(ForecastMovie.poster_path);
+
+app.get(`/movies`, handleMovieData);
